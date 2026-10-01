@@ -1,1 +1,54 @@
-# Deployment Guide - Joker-X\n\n## Pre-Deployment Checklist ✅\n\n- [x] ESLint configured and passing\n- [x] TypeScript compilation working\n- [x] Build process clean\n- [x] Environment variables documented\n- [x] Next.js optimized configuration\n- [x] Tailwind CSS properly set up\n\n## Vercel Deployment Steps\n\n### 1. Prepare Environment Variables\n\nBefore deploying to Vercel, ensure these variables are set in your Vercel project settings:\n\n```\nNEXT_PUBLIC_SUPABASE_URL = https://your-project.supabase.co\nNEXT_PUBLIC_SUPABASE_ANON_KEY = your-anon-key\nNEXT_PUBLIC_SITE_URL = https://your-domain.com\n```\n\n### 2. Deploy to Vercel\n\nOption A: Using Vercel CLI\n```bash\nnpm install -g vercel\nvercel\n```\n\nOption B: Connect GitHub\n1. Go to https://vercel.com\n2. Import repository\n3. Configure environment variables\n4. Deploy\n\n### 3. Verify Deployment\n\nAfter deployment:\n- ✅ Home page loads correctly\n- ✅ Products display with images\n- ✅ Cart functionality works\n- ✅ Admin page is protected (if Supabase auth configured)\n- ✅ No console errors\n\n## Troubleshooting\n\n### Build Fails\n- Check `.env.local` variables are set correctly\n- Verify Node.js version >= 20.6\n- Run `npm install` and `npm run build` locally first\n\n### Images Not Loading\n- Ensure image domains are whitelisted in `next.config.js`\n- Check Supabase storage permissions\n\n### Admin Page 401 Unauthorized\n- Verify Supabase credentials in Vercel env\n- Confirm `is_admin()` RPC function exists in Supabase\n- Check user authentication in Supabase Auth\n\n## Production Best Practices\n\n1. **Security**\n   - Never commit `.env.local`\n   - Use Vercel environment variables for secrets\n   - Enable CORS properly in Supabase\n\n2. **Performance**\n   - Enable image optimization\n   - Use Vercel's analytics\n   - Monitor bundle size\n\n3. **Monitoring**\n   - Set up error tracking\n   - Monitor database queries\n   - Check Vercel Analytics\n\n## Support\n\n- Vercel Docs: https://vercel.com/docs\n- Next.js Docs: https://nextjs.org/docs\n- Supabase Docs: https://supabase.com/docs\n"
+# Deployment Guide
+
+## Vercel Deployment
+
+### Prerequisites
+- GitHub account
+- Vercel account (free)
+
+### Steps
+
+1. **Push to GitHub**
+   ```bash
+   git push origin main
+   ```
+
+2. **Connect to Vercel**
+   - Go to [vercel.com](https://vercel.com)
+   - Click "New Project"
+   - Import your GitHub repository
+   - Vercel auto-detects Next.js
+
+3. **Configure Environment Variables** (if needed)
+   - Add any required `.env` variables in Vercel project settings
+   - Example: `NEXT_PUBLIC_SITE_URL`
+
+4. **Deploy**
+   - Click "Deploy"
+   - Vercel builds and deploys automatically
+   - Your site is live at the provided URL
+
+### Build Output
+```
+✓ Compiled successfully
+✓ Prepped for deployment
+```
+
+## Production Checklist
+
+- [x] TypeScript compiles without errors
+- [x] ESLint passes
+- [x] Tailwind CSS configured
+- [x] Next.js config optimized
+- [x] Environment variables set
+- [x] Responsive design tested
+- [x] Performance optimized
+- [x] SEO metadata included
+
+## Performance Metrics
+
+- Next.js optimized images
+- CSS purged for production
+- Code splitting enabled
+- Static assets cached
+
