@@ -1,0 +1,1 @@
+Add vercel.json to the ROOT of the Joker-X GitHub repository, then commit directly to main.
