@@ -1,14 +1,22 @@
-import { createServerClient } from "@supabase/ssr";
-import { NextResponse, type NextRequest } from "next/server";
-export async function middleware(req: NextRequest) {
-  let res = NextResponse.next({ request: req });
-  const s = createServerClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, {
-    cookies: { getAll: () => req.cookies.getAll(), setAll: (l: { name: string; value: string; options: any }[]) => { l.forEach(({ name, value }) => req.cookies.set(name, value)); res = NextResponse.next({ request: req }); l.forEach(({ name, value, options }) => res.cookies.set(name, value, options)); } },
+import { NextResponse, type NextRequest } from 'next/server';
+
+// HTTP Basic Auth for /admin and /api/admin. Credentials come from env vars only.
+export function middleware(req: NextRequest) {
+  const user = process.env.ADMIN_USER;
+  const pass = process.env.ADMIN_PASSWORD;
+  if (!user || !pass) return new NextResponse('Admin is not configured', { status: 503 });
+
+  const header = req.headers.get('authorization') ?? '';
+  if (header.startsWith('Basic ')) {
+    try {
+      const [u, ...rest] = atob(header.slice(6)).split(':');
+      if (u === user && rest.join(':') === pass) return NextResponse.next();
+    } catch {}
+  }
+  return new NextResponse('Authentication required', {
+    status: 401,
+    headers: { 'WWW-Authenticate': 'Basic realm="JOKER Admin", charset="UTF-8"' },
   });
-  const { data: { user } } = await s.auth.getUser();
-  if (!user) return NextResponse.redirect(new URL("/login", req.url));
-  const { data: ok } = await s.rpc("is_admin");
-  if (!ok) return NextResponse.redirect(new URL("/login?error=not_admin", req.url));
-  return res;
 }
-export const config = { matcher: ["/admin/:path*"] };
+
+export const config = { matcher: ['/admin/:path*', '/api/admin/:path*'] };
